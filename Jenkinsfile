@@ -8,19 +8,15 @@ node ('maven') {
     }
     stage('Build Image') {
         unstash name:"jar"
-        script {
-          openshift.withCluster() {
-            openshift.startBuild("inventory-s2i", "--from-file=target/inventory-1.0-SNAPSHOT-swarm.jar", "--wait")
-          }
+        openshift.withCluster() {
+          openshift.startBuild("inventory-s2i", "--from-file=target/inventory-1.0-SNAPSHOT-swarm.jar", "--wait")
         }
     }
     stage('Deploy') {
-        script {
-          openshift.withCluster() {
-            def dc = openshift.selector("dc", "inventory")
-            dc.rollout().latest()
-            dc.rollout().status()
-          }
+        openshift.withCluster() {
+          def dc = openshift.selector("dc", "inventory")
+          dc.rollout().latest()
+          dc.rollout().status()
         }
     }
 }
