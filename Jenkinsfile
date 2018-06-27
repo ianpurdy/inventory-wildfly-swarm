@@ -1,4 +1,7 @@
 node ('maven') {
+    stage('Initialisation') {
+        git credentialsId: 'c5abe1ef6e063350701ca080ff3bcc761c7906ff', url: 'https://github.com/ianpurdy/inventory-wildfly-swarm.git'
+    }
     stage('Build JAR') {
         sh "mvn package"
         stash name:"jar", includes:"target/inventory-1.0-SNAPSHOT-swarm.jar"
@@ -21,3 +24,4 @@ node ('maven') {
         }
     }
 }
+
